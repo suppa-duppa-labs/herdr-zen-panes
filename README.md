@@ -22,20 +22,15 @@ mkdir -p ~/.config/herdr-app/mods && curl -fsSL https://github.com/suppa-duppa-l
 
 ## Turn it on
 
-Herdr's shipped layouts are read-only, so first duplicate yours with Duplicate layout in the command palette, or:
+Start it once in each layout you use; it opens a window with nothing in it, which Herdr brings back on every start:
 
 ```sh
-herdr-app do layout.clone '{"name":"main","as":"my-layout"}'
+herdr-app do mod.open --name zen-panes
 ```
 
-In `~/.config/herdr-app/layouts/my-layout.json`, add this to the root node.
-It draws nothing.
+Run it again to turn it off.
 
-```json
-"floating": [ { "id": "zen-panes", "content": { "mod": "zen-panes" } } ]
-```
-
-Then point your pane keys at it in `~/.config/herdr-app/keys.json`, in place of `pane.go`:
+Then, in `~/.config/herdr-app/keys.json`, change your `pane.go` keys to these, in the section where they are now:
 
 ```json
 "ctrl-a h": "zen-panes.go:left",
@@ -48,10 +43,12 @@ Then point your pane keys at it in `~/.config/herdr-app/keys.json`, in place of 
 "ctrl-a right": "zen-panes.go:right"
 ```
 
+A key bound in `terminal` wins over the same key in `global`, so a leftover `pane.go` there keeps zoom from moving.
+
 ## Notes
 
-Made for Herdr app 0.1.9 and later; it works from terminal panes and mod panes.
-The keys only work in layouts that have the floating block; in others they show an unknown command error.
+Tested with Herdr app 0.1.12, from terminal panes and mod panes.
+In a layout where it isn't started, the keys show an unknown command error.
 Herdr can't find a zoomed pane's neighbour, so the mod unzooms, moves and zooms again, and the full layout can show for one frame.
 [RECIPE.md](RECIPE.md) is the brief to build the mod from scratch.
 MIT, see [LICENSE](LICENSE).

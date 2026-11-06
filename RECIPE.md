@@ -8,7 +8,7 @@ The mod draws nothing.
 
 **What you see:**
 
-- Nothing of the mod itself: it is an empty floating block, and Herdr draws no frame around a floating block whose content is empty.
+- Nothing of the mod itself: it runs as a window overlay with no frame and nothing in it, so it has no size.
 - With a pane zoomed, a move key swaps the zoomed pane for its neighbour in that direction; the tab stays zoomed.
 - With nothing zoomed, the move key focuses the neighbour as `pane.go` does.
 
@@ -24,7 +24,7 @@ The mod draws nothing.
 
 **Built from:**
 
-- One mod, `zen-panes`, `place: "none"`, used as a floating block on the root of a cloned layout: `{ "id": "zen-panes", "content": { "mod": "zen-panes" } }`.
+- One mod, `zen-panes`, `place: "none"`, whose `mod.json` `overlay` is `{ kind: "window", key: "zen-panes", keep: true, frame: "none" }`: `mod.open {name: "zen-panes"}` opens it as a kept window of the shown layout, which Herdr reopens on every start and whenever that layout is shown again; `mod.open` again closes it.
 - `main.js`: `nextCommand()` in a loop started from `init`, `focused()`, `panes()`, `run("pane.go")`, `run("pane.zoom")`; `render()` returns an empty `div()`.
 
 **Watch out:**
@@ -32,12 +32,15 @@ The mod draws nothing.
 - `pane.go` finds neighbours from the panes' on-screen bounds, among the panes shown; while zoomed only the zoomed pane is shown, so `pane.go` does nothing, and mods can't read pane geometry to find the neighbour themselves.
 - The bounds are recorded while a frame is drawn, so `pane.go` has to wait for a frame of the unzoomed layout; running unzoom, `pane.go` and zoom back to back moves nowhere.
   That one frame can show.
-- `<mod>.<command>` reaches shown copies only, so the block must be in the layout and not hidden: a hidden layout block never starts again after a reload, while a floating block with empty content starts and stays invisible.
-- Herdr never docks a new mod into its shipped layouts, and they are read-only: the layout has to be a clone.
+- `<mod>.<command>` reaches shown copies only, and overlays count as shown; a window overlay needs no layout edit, so it works in shipped layouts too, unlike a layout or floating block.
+- A window overlay doesn't take the keyboard and, with no frame and no content, covers nothing.
+- Windows close on a layout switch; kept ones come back only with the layout they were opened in.
+- A `terminal` key binding beats the same key in `global`: the move keys must replace `pane.go` in whichever section holds it.
 
 **Done when:**
 
 - `herdr-app check mods/zen-panes` passes.
+- After `herdr-app do mod.open --name zen-panes`, `herdr-app status` lists `zen-panes` under overlays, the window looks unchanged, and it is still listed after a restart.
 - With two panes side by side, the left one zoomed, `zen-panes.go:right` shows the right one zoomed and focused.
 - With nothing zoomed, `zen-panes.go:right` focuses the right pane and nothing zooms.
 - With the left pane zoomed, `zen-panes.go:left` leaves it zoomed and focused.
