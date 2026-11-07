@@ -1,0 +1,1 @@
+{ "place": "none", "title": "Zen panes", "overlay": { "kind": "window", "key": "zen-panes", "keep": true, "frame": "none" } }
