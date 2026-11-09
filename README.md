@@ -2,7 +2,9 @@
 
 Keep a zoomed pane zoomed while you move between panes in the [Herdr](https://herdr.dev) desktop app.
 With a pane zoomed, moving left, right, up or down shows the pane next to it, zoomed.
+With no pane that way, nothing changes.
 With nothing zoomed, moving works as it always does.
+A small map of the tab shows for a second when you zoom or move, with the zoomed pane lit.
 
 ![Zen panes](preview.png)
 
@@ -22,7 +24,7 @@ mkdir -p ~/.config/herdr-app/mods && curl -fsSL https://github.com/suppa-duppa-l
 
 ## Turn it on
 
-Start it once in each layout you use; it opens a window with nothing in it, which Herdr brings back on every start:
+Start it once in each layout you use; it opens a small window that only shows the map, which Herdr brings back on every start:
 
 ```sh
 herdr-app do mod.open --name zen-panes
@@ -45,10 +47,12 @@ Then, in `~/.config/herdr-app/keys.json`, change your `pane.go` keys to these, i
 
 A key bound in `terminal` wins over the same key in `global`, so a leftover `pane.go` there keeps zoom from moving.
 
+To hide the map, set `"map": false` in `mods/zen-panes/mod.json`, then run the command above twice.
+
 ## Notes
 
 Tested with Herdr app 0.1.12, from terminal panes and mod panes.
 In a layout where it isn't started, the keys show an unknown command error.
-Herdr can't find a zoomed pane's neighbour, so the mod unzooms, moves and zooms again, and the full layout can show for one frame.
+The mod reads how each tab is split from herdr-core's own state on the tab's machine; if it can't, it unzooms, moves and zooms again, and the full layout can show for one frame.
 [RECIPE.md](RECIPE.md) is the brief to build the mod from scratch.
 MIT, see [LICENSE](LICENSE).
